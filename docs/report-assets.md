@@ -10,6 +10,11 @@ Use these screenshots when writing the Microsoft Word report.
 - `figure-04-subjects.png` - Subjects page.
 - `figure-05-calendar.png` - Weekly Calendar page.
 
+## Flowchart Figure
+
+- `ux-flowchart.svg` - StudyFlow UX flow from landing page to dashboard actions, subjects, calendar, and `localStorage` persistence.
+- `ux-flowchart-imagegen-draft.png` - Imagegen draft used as the visual direction before creating the text-accurate final flowchart.
+
 ## Visual Fix Evidence
 
 - `fix-home-header-754.png` - Home header after the compact-width fix.

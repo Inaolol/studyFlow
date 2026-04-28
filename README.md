@@ -1,66 +1,137 @@
 # StudyFlow
 
-StudyFlow is a static study-planning website built with HTML, CSS, and JavaScript. It helps students organize subjects, tasks, deadlines, and weekly workload in one simple browser-based planner.
+StudyFlow is a static study planner for students. It organizes subjects, tasks, deadlines, and weekly workload in one browser-based interface.
 
-## Screenshot
-
-Add the landing page screenshot here:
-
-```md
 ![StudyFlow landing page](docs/figure-01-home-landing.png)
+
+> The project is intentionally built with plain **HTML**, **CSS**, and **JavaScript** so the structure, styling, and behavior can be explained clearly in a course report.
+
+## Project Summary
+
+* **Purpose:** StudyFlow helps students see what to study today, what is coming next, and which subjects need attention.
+* **Visual Layout:** The interface uses a calm cream background, charcoal text, coral actions, subject color tags, progress cards, task rows, and modal forms.
+* **Document Structure:** The project is organized as one final static website with separate files for structure, style, and behavior.
+* **Tone:** The design is simple and direct. It focuses on planning work instead of adding unnecessary screens.
+* **Data Handling:** Tasks and subjects are saved in the browser using `localStorage`.
+* **User Control:** The user decides what to add, complete, delete, or schedule. The website only organizes the information.
+
+## Main Screens
+
+| Screen | Purpose |
+|---|---|
+| Home | Introduces StudyFlow and explains the planner idea. |
+| Today | Shows current tasks, progress, filters, and quick actions. |
+| Subjects | Groups work by course and shows progress for each subject. |
+| Calendar | Shows weekly workload and task distribution by day. |
+
+## File Structure
+
+```text
+studyflow/
+|-- index.html
+|-- styles.css
+|-- script.js
+|-- README.md
+|-- report-guide.md
+|-- docs/
 ```
 
-## Project Overview
+## Runtime Files
 
-The project was created for a web programming course submission. The final website is a single-page app that uses hash navigation to switch between the main views without a backend server.
+| File | Role |
+|---|---|
+| `index.html` | Semantic page shell with header, navigation, app mount, and modal mount. |
+| `styles.css` | Design tokens, layout rules, cards, buttons, forms, responsive CSS, and animations. |
+| `script.js` | Hash routing, rendering, events, task actions, subject actions, calendar navigation, and `localStorage`. |
 
-Main pages:
+## Feature Flow
 
-- Home / Landing page
-- Today Dashboard
-- Subjects page
-- Weekly Calendar
+![StudyFlow UX flowchart](docs/ux-flowchart.svg)
 
-## Features
+The flowchart shows how the main user actions move through the website.
 
-- Add new study tasks.
-- Mark tasks as complete or incomplete.
-- Delete tasks.
-- Add new subjects.
-- Filter tasks by day, subject, upcoming work, overdue work, or all tasks.
-- Move between calendar weeks.
-- Save data in the browser with `localStorage`.
-- Responsive layout for desktop and smaller screens.
-- CSS animations on the landing page.
+```text
+Start
+  |
+  v
+Home / Landing Page
+  |
+  +--> Start Planning
+           |
+           v
+     Today Dashboard
+           |
+           +--> Add Task Modal
+           |      |
+           |      v
+           |   Save Task
+           |
+           +--> Complete / Uncomplete Task
+           |
+           +--> Delete Task
+           |
+           +--> Filter Tasks
+                  |
+                  +--> Today
+                  +--> Next 7 Days
+                  +--> Overdue
+                  +--> All Tasks
+                  +--> By Subject
 
-## Technology Used
+Main Navigation
+  |
+  +--> Subjects Page
+  |      |
+  |      +--> View Subject Progress
+  |      +--> Add New Subject
+  |
+  +--> Calendar Page
+         |
+         +--> View Weekly Workload
+         +--> Previous / Next Week
+         +--> Add Task to Selected Day
 
-- HTML for the page structure.
-- CSS for the design system, layout, responsive rules, and animations.
-- JavaScript for rendering pages, handling interactions, routing, and saving data.
-- `localStorage` for browser-side data persistence.
+All Changes
+  |
+  v
+localStorage
+  |
+  v
+Data stays after browser refresh
+```
 
-## Final Runtime Files
+## Key Features
 
-- `index.html`
-- `styles.css`
-- `script.js`
+* **Task Control:** Add, complete, uncomplete, and delete study tasks.
+* **Subject Control:** Add subjects and assign tasks to them.
+* **Dashboard Filters:** View today, next 7 days, overdue tasks, all tasks, or one subject.
+* **Calendar Planning:** Move between weeks and add tasks for a selected day.
+* **Visual Feedback:** Progress cards, workload bars, subject colors, and completed task styling show status quickly.
+* **Landing Animation:** CSS keyframes animate the landing headline, buttons, background blobs, and scroll cue.
 
-## Documentation
+## How to Run
 
-Report and screenshot resources are stored in the `docs/` folder:
-
-- `docs/report-assets.md`
-- `docs/animation-notes.md`
-- `docs/visual-review-notes.md`
-- `docs/word-report-agent-prompt.md`
-
-## How to Open
-
-Open `index.html` directly in a browser.
+1. Open the project folder.
+2. Open `index.html` in a browser.
+3. Use the navigation links to move between pages.
 
 ```text
 index.html
 ```
 
-No installation or backend server is required.
+No backend server, build step, or installation is required.
+
+## Report Resources
+
+| File | Use |
+|---|---|
+| `report-guide.md` | Main writing guide for the Microsoft Word report. |
+| `docs/report-assets.md` | Screenshot index. |
+| `docs/ux-flowchart.svg` | UX flowchart for the README and report feature flow section. |
+| `docs/animation-notes.md` | Explanation of landing animations. |
+| `docs/visual-review-notes.md` | Notes from comparing final pages to the original prototype. |
+| `docs/word-report-agent-prompt.md` | Prompt for generating the final Word report. |
+
+## Final Note
+
+StudyFlow is not a backend application. It is a focused front-end project that demonstrates page structure, styling, JavaScript interactivity, browser storage, navigation, and report-ready documentation.

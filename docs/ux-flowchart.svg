@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1550" viewBox="0 0 1200 1550" role="img" aria-labelledby="title desc">
+  <title id="title">StudyFlow UX Flow</title>
+  <desc id="desc">A flowchart showing the StudyFlow user path from home to planning, task actions, subjects, calendar, and localStorage persistence.</desc>
+  <defs>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#1f1b18" flood-opacity="0.14"/>
+    </filter>
+    <marker id="arrowCoral" markerWidth="14" markerHeight="14" refX="10" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#ef4030"/>
+    </marker>
+    <marker id="arrowTeal" markerWidth="14" markerHeight="14" refX="10" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#2d827c"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="14" markerHeight="14" refX="10" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#1264a3"/>
+    </marker>
+    <linearGradient id="cream" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff8ee"/>
+      <stop offset="100%" stop-color="#f8ecdf"/>
+    </linearGradient>
+    <linearGradient id="coralFill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff644d"/>
+      <stop offset="100%" stop-color="#ef4030"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="1550" fill="url(#cream)"/>
+  <circle cx="120" cy="180" r="220" fill="#ffd1c2" opacity="0.35"/>
+  <circle cx="1070" cy="1220" r="260" fill="#dceff8" opacity="0.45"/>
+
+  <text x="600" y="118" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="86" font-weight="700" fill="#201c19">StudyFlow UX Flow</text>
+  <text x="600" y="165" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="22" fill="#6a5f59">Feature path for the final static website</text>
+
+  <g font-family="Inter, Arial, sans-serif" font-size="36" font-weight="700" fill="#201c19" text-anchor="middle">
+    <rect x="370" y="220" width="460" height="94" rx="14" fill="#fffdf8" stroke="#201c19" stroke-width="4" filter="url(#softShadow)"/>
+    <text x="600" y="281">Home / Landing</text>
+
+    <path d="M600 314 L600 374" stroke="#ef4030" stroke-width="5" fill="none" marker-end="url(#arrowCoral)"/>
+    <rect x="360" y="382" width="480" height="104" rx="14" fill="url(#coralFill)" filter="url(#softShadow)"/>
+    <text x="600" y="448" fill="#ffffff">Start Planning</text>
+
+    <path d="M600 486 L600 552" stroke="#ef4030" stroke-width="5" fill="none" marker-end="url(#arrowCoral)"/>
+    <rect x="360" y="560" width="480" height="104" rx="14" fill="#fff1e9" stroke="#ef4030" stroke-width="4" filter="url(#softShadow)"/>
+    <text x="600" y="626">Today Dashboard</text>
+
+    <path d="M600 664 L600 730 M600 730 L230 730 M600 730 L970 730 M230 730 L230 780 M600 730 L600 780 M970 730 L970 780" stroke="#ef4030" stroke-width="5" fill="none" marker-end="url(#arrowCoral)"/>
+
+    <rect x="92" y="790" width="276" height="92" rx="12" fill="#fffdf8" stroke="#ef4030" stroke-width="4"/>
+    <text x="230" y="850" font-size="30">Add Task</text>
+
+    <rect x="462" y="790" width="276" height="92" rx="12" fill="#fffdf8" stroke="#ef4030" stroke-width="4"/>
+    <text x="600" y="850" font-size="30">Complete Task</text>
+
+    <rect x="832" y="790" width="276" height="92" rx="12" fill="#fffdf8" stroke="#ef4030" stroke-width="4"/>
+    <text x="970" y="850" font-size="30">Filter Tasks</text>
+
+    <path d="M230 882 L230 956 M600 882 L600 956 M970 882 L970 956" stroke="#ef4030" stroke-width="5" fill="none" marker-end="url(#arrowCoral)"/>
+
+    <rect x="90" y="966" width="300" height="98" rx="14" fill="#ecf7f5" stroke="#2d827c" stroke-width="4" filter="url(#softShadow)"/>
+    <text x="240" y="1030">Subjects</text>
+
+    <rect x="810" y="966" width="300" height="98" rx="14" fill="#edf6fd" stroke="#1264a3" stroke-width="4" filter="url(#softShadow)"/>
+    <text x="960" y="1030">Calendar</text>
+
+    <path d="M240 1064 L240 1116 M240 1116 L130 1116 M240 1116 L350 1116 M130 1116 L130 1164 M350 1116 L350 1164" stroke="#2d827c" stroke-width="5" fill="none" marker-end="url(#arrowTeal)"/>
+    <rect x="35" y="1174" width="190" height="82" rx="10" fill="#fffdf8" stroke="#2d827c" stroke-width="3"/>
+    <text x="130" y="1226" font-size="23">View Progress</text>
+    <rect x="255" y="1174" width="190" height="82" rx="10" fill="#fffdf8" stroke="#2d827c" stroke-width="3"/>
+    <text x="350" y="1226" font-size="23">Add Subject</text>
+
+    <path d="M960 1064 L960 1116 M960 1116 L850 1116 M960 1116 L1070 1116 M850 1116 L850 1164 M1070 1116 L1070 1164" stroke="#1264a3" stroke-width="5" fill="none" marker-end="url(#arrowBlue)"/>
+    <rect x="742" y="1174" width="216" height="82" rx="10" fill="#fffdf8" stroke="#1264a3" stroke-width="3"/>
+    <text x="850" y="1226" font-size="22">Weekly Workload</text>
+    <rect x="980" y="1174" width="190" height="82" rx="10" fill="#fffdf8" stroke="#1264a3" stroke-width="3"/>
+    <text x="1075" y="1226" font-size="22">Add Task to Day</text>
+
+    <path d="M130 1256 L130 1315 L600 1315 M1075 1256 L1075 1315 L600 1315 M600 1315 L600 1360" stroke="#5b6d66" stroke-width="5" fill="none" marker-end="url(#arrowCoral)"/>
+    <rect x="420" y="1370" width="360" height="88" rx="12" fill="#fffdf8" stroke="#201c19" stroke-width="4" filter="url(#softShadow)"/>
+    <text x="600" y="1426">localStorage</text>
+
+    <path d="M600 1458 L600 1498" stroke="#ef4030" stroke-width="5" fill="none" marker-end="url(#arrowCoral)"/>
+    <rect x="300" y="1508" width="600" height="0" fill="none"/>
+  </g>
+
+  <g font-family="Inter, Arial, sans-serif" font-size="32" font-weight="700" text-anchor="middle">
+    <rect x="305" y="1468" width="590" height="70" rx="12" fill="#fff1e9" stroke="#ef4030" stroke-width="4"/>
+    <text x="600" y="1514" fill="#201c19">Data Persists After Refresh</text>
+  </g>
+</svg>

@@ -1,7 +1,3 @@
-# Prompt for Writing the StudyFlow Microsoft Word Report
-
-Copy this prompt into a new chat when you want an agent to write the final Microsoft Word report.
-
 ## Agent Prompt
 
 You are helping write a Microsoft Word project report for an Internet Programming / Web Programming Fundamentals course project.
@@ -62,6 +58,7 @@ Do not write like marketing copy. Write like a clear student project report. The
 Use these source files:
 - `report-guide.md` - main report outline and required talking points.
 - `docs/report-assets.md` - screenshot index.
+- `docs/ux-flowchart.svg` - feature flowchart for planning and UX explanation.
 - `docs/animation-notes.md` - landing animation explanation.
 - `docs/visual-review-notes.md` - page-by-page visual review notes.
 - `index.html` - semantic structure.
@@ -74,8 +71,9 @@ Use these screenshots in the Word report:
 - `docs/figure-03-add-task-modal.png`
 - `docs/figure-04-subjects.png`
 - `docs/figure-05-calendar.png`
+- `docs/ux-flowchart.svg`
 
-Optional evidence screenshots:
+More evidence screenshots:
 - `docs/animation-landing-entrance.png`
 - `docs/animation-landing-settled.png`
 - `docs/animation-task-preview.png`
@@ -91,8 +89,9 @@ Create a polished `.docx` report with:
 - table of contents,
 - numbered sections,
 - figure captions,
+- code snipts
 - screenshot placements,
-- concise technical explanations,
+- technical explanations,
 - placeholders for student name, student number, GitHub username, and public repository link,
 - signature line at the end.
 
@@ -146,13 +145,10 @@ File: `docs/review-01-today-after-visual-pass.png`
 
 ## Report Writing Notes
 
-- Mention that the final project was converted from a prototype into plain HTML, CSS, and JavaScript.
-- Mention that `pages/index-v1-textheavy.html` was excluded from the final implementation.
-- Mention that the final runtime files are only `index.html`, `styles.css`, and `script.js`.
-- Mention that `localStorage` is the data-handling method because no backend database was required.
-- Mention that the visual design keeps the original StudyFlow design system: Fraunces display font, Inter body font, charcoal/cream/coral palette, subject colors, cards, progress bars, modals, and responsive layouts.
+- Mention how the code is connected the 'HTML, CSS, and JavaScript'.
+- Mention `localStorage` and what is it.
+- Mention that the visual design: Fraunces display font, Inter body font, charcoal/cream/coral palette, subject colors, cards, progress bars, modals, and responsive layouts.
 - Mention that animation was added using CSS keyframes and includes reduced-motion support.
-- Mention that visual review was performed page by page against the original prototype files.
 
 ## Student Placeholders
 
