@@ -4,7 +4,7 @@ StudyFlow is a static study planner for students. It organizes subjects, tasks, 
 
 ![StudyFlow landing page](docs/figure-01-home-landing.png)
 
-> The project is intentionally built with plain **HTML**, **CSS**, and **JavaScript** so the structure, styling, and behavior are easy to review.
+> The project is built with plain **HTML**, **CSS**, and **JavaScript** so the structure, styling, and behavior are easy to review.
 
 ## Project Summary
 
@@ -47,58 +47,6 @@ studyflow/
 
 ![StudyFlow UX flowchart](docs/ux-flowchart.svg)
 
-The flowchart shows how the main user actions move through the website.
-
-```text
-Start
-  |
-  v
-Home / Landing Page
-  |
-  +--> Start Planning
-           |
-           v
-     Today Dashboard
-           |
-           +--> Add Task Modal
-           |      |
-           |      v
-           |   Save Task
-           |
-           +--> Complete / Uncomplete Task
-           |
-           +--> Delete Task
-           |
-           +--> Filter Tasks
-                  |
-                  +--> Today
-                  +--> Next 7 Days
-                  +--> Overdue
-                  +--> All Tasks
-                  +--> By Subject
-
-Main Navigation
-  |
-  +--> Subjects Page
-  |      |
-  |      +--> View Subject Progress
-  |      +--> Add New Subject
-  |
-  +--> Calendar Page
-         |
-         +--> View Weekly Workload
-         +--> Previous / Next Week
-         +--> Add Task to Selected Day
-
-All Changes
-  |
-  v
-localStorage
-  |
-  v
-Data stays after browser refresh
-```
-
 ## Key Features
 
 * **Task Control:** Add, complete, uncomplete, and delete study tasks.
@@ -107,19 +55,3 @@ Data stays after browser refresh
 * **Calendar Planning:** Move between weeks and add tasks for a selected day.
 * **Visual Feedback:** Progress cards, workload bars, subject colors, and completed task styling show status quickly.
 * **Landing Animation:** CSS keyframes animate the landing headline, buttons, background blobs, and scroll cue.
-
-## How to Run
-
-1. Open the project folder.
-2. Open `index.html` in a browser.
-3. Use the navigation links to move between pages.
-
-```text
-index.html
-```
-
-No backend server, build step, or installation is required.
-
-## Final Note
-
-StudyFlow is not a backend application. It is a focused front-end project that demonstrates page structure, styling, JavaScript interactivity, browser storage, and navigation.
