@@ -4,7 +4,7 @@ StudyFlow is a static study planner for students. It organizes subjects, tasks, 
 
 ![StudyFlow landing page](docs/figure-01-home-landing.png)
 
-> The project is intentionally built with plain **HTML**, **CSS**, and **JavaScript** so the structure, styling, and behavior can be explained clearly in a course report.
+> The project is intentionally built with plain **HTML**, **CSS**, and **JavaScript** so the structure, styling, and behavior are easy to review.
 
 ## Project Summary
 
@@ -32,7 +32,6 @@ studyflow/
 |-- styles.css
 |-- script.js
 |-- README.md
-|-- report-guide.md
 |-- docs/
 ```
 
@@ -121,17 +120,6 @@ index.html
 
 No backend server, build step, or installation is required.
 
-## Report Resources
-
-| File | Use |
-|---|---|
-| `report-guide.md` | Main writing guide for the Microsoft Word report. |
-| `docs/report-assets.md` | Screenshot index. |
-| `docs/ux-flowchart.svg` | UX flowchart for the README and report feature flow section. |
-| `docs/animation-notes.md` | Explanation of landing animations. |
-| `docs/visual-review-notes.md` | Notes from comparing final pages to the original prototype. |
-| `docs/word-report-agent-prompt.md` | Prompt for generating the final Word report. |
-
 ## Final Note
 
-StudyFlow is not a backend application. It is a focused front-end project that demonstrates page structure, styling, JavaScript interactivity, browser storage, navigation, and report-ready documentation.
+StudyFlow is not a backend application. It is a focused front-end project that demonstrates page structure, styling, JavaScript interactivity, browser storage, and navigation.

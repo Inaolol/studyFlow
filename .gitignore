@@ -1,0 +1,10 @@
+# Project report artifacts
+report-guide.md
+studyflow-report.docx
+*report*.docx
+~$*.docx
+~WRL*.tmp
+output/
+docs/report-assets.md
+docs/word-report-agent-prompt.md
+docs/*notes.md
