@@ -60,7 +60,7 @@ function migrateLegacy(raw: unknown, now: number): PersistedState {
     .filter(isObject)
     .map(s => ({
       id: String(s.id),
-      name: String(s.name ?? ''),
+      name: typeof s.name === 'string' ? s.name : '',
       color: typeof s.color === 'string' ? s.color : '#888888',
       createdAt: now,
     }));
@@ -76,7 +76,7 @@ function migrateLegacy(raw: unknown, now: number): PersistedState {
       return {
         id: String(t.id),
         subjectId: typeof t.subjectId === 'string' ? t.subjectId : null,
-        title: String(t.title ?? ''),
+        title: typeof t.title === 'string' ? t.title : '',
         ...(notes !== undefined ? { notes } : {}),
         dueAt,
         completedAt: done ? now : null,
