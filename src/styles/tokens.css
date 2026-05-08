@@ -1,0 +1,53 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap");
+
+:root {
+  --charcoal: #25221e;
+  --charcoal-18: rgba(37, 34, 30, 0.18);
+  --charcoal-12: rgba(37, 34, 30, 0.12);
+  --charcoal-08: rgba(37, 34, 30, 0.08);
+  --charcoal-04: rgba(37, 34, 30, 0.04);
+  --neutral-gray: #999999;
+  --pale-gray: #f2efed;
+  --light-gray: #fafafa;
+  --near-white: #fefdfc;
+  --white: #ffffff;
+  --cream: #fff6f0;
+  --accent: #e34432;
+  --accent-hover: #cf3520;
+  --accent-soft: rgba(227, 68, 50, 0.08);
+  --accent-tint: #ffb399;
+  --blue: #0f66ae;
+  --teal: #497d7e;
+  --green: #4c7a45;
+  --gold: #ffc93e;
+  --mauve: #b05a8e;
+  --amber: #c77a2c;
+  --subj-1: #e34432;
+  --subj-2: #497d7e;
+  --subj-3: #0f66ae;
+  --subj-4: #b05a8e;
+  --subj-5: #4c7a45;
+  --subj-6: #c77a2c;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --sh-1: rgba(37, 34, 30, 0.04) 0 1px 0 0;
+  --sh-2: rgba(37, 34, 30, 0.07) 0 14px 19px -9px, rgba(37, 34, 30, 0.18) 0 10px 48px 0;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+  --charcoal: #f5f1e6;
+  --charcoal-18: rgba(245, 241, 230, 0.18);
+  --charcoal-12: rgba(245, 241, 230, 0.12);
+  --charcoal-08: rgba(245, 241, 230, 0.08);
+  --charcoal-04: rgba(245, 241, 230, 0.04);
+  --pale-gray: #2c2c2c;
+  --light-gray: #242424;
+  --near-white: #1f1f1f;
+  --white: #1a1a1a;
+  --cream: #1a1a1a;
+}
