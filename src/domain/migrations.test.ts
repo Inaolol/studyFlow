@@ -41,8 +41,8 @@ describe('loadAndMigrate', () => {
       id: 't1', title: 'Problem set', subjectId: 's1', notes: 'Read first',
       completedAt: null, estimatedMinutes: 60,
     });
-    expect(state.tasks[0].dueAt).toBe(new Date(2026, 4, 8).getTime());
-    expect(state.tasks[1].completedAt).toBe(NOW);
+    expect(state.tasks[0]!.dueAt).toBe(new Date(2026, 4, 8).getTime());
+    expect(state.tasks[1]!.completedAt).toBe(NOW);
   });
 
   it('reads v1 data unchanged', () => {
