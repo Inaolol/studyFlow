@@ -8,7 +8,10 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    environmentMatchGlobs: [['src/ui/**', 'jsdom']],
+    environmentMatchGlobs: [
+      ['src/ui/**', 'jsdom'],
+      ['src/domain/migrations.test.ts', 'jsdom'],
+    ],
     include: ['src/**/*.test.ts', 'tests/unit/**/*.test.ts'],
   },
 });
