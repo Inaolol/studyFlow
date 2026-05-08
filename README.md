@@ -2,7 +2,7 @@
 
 StudyFlow is a static study planner for students. It organizes subjects, tasks, deadlines, and weekly workload in one browser-based interface.
 
-![StudyFlow landing page](docs/figure-01-home-landing.png)
+![StudyFlow landing page](docs/screenshots/figure-01-home-landing.png)
 
 > The project is built with plain **HTML**, **CSS**, and **JavaScript** so the structure, styling, and behavior are easy to review.
 
