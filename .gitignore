@@ -8,3 +8,15 @@ output/
 docs/report-assets.md
 docs/word-report-agent-prompt.md
 docs/*notes.md
+
+# Build and dependencies
+node_modules
+dist
+.vite
+coverage
+playwright-report
+test-results
+
+# Environment and OS
+.DS_Store
+*.log
