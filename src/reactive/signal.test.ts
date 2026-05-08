@@ -89,3 +89,42 @@ describe('computed', () => {
     expect(compute).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('dispose', () => {
+  it('stops re-running after dispose', async () => {
+    const a = signal(0);
+    const fn = vi.fn(() => { a(); });
+    const stop = effect(fn);
+    stop();
+    a.set(1);
+    await Promise.resolve();
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+
+  it('removes effect from signal subscribers (no leak)', async () => {
+    const a = signal(0);
+    let calls = 0;
+    const stop = effect(() => { a(); calls++; });
+    stop();
+    for (let i = 0; i < 10; i++) a.set(i + 1);
+    await Promise.resolve();
+    expect(calls).toBe(1);
+  });
+});
+
+describe('nested effects', () => {
+  it('inner effect tracks its own dependencies independently', async () => {
+    const a = signal(0);
+    const b = signal(0);
+    const outerFn = vi.fn(() => {
+      a();
+      effect(() => { b(); });
+    });
+    effect(outerFn);
+    expect(outerFn).toHaveBeenCalledTimes(1);
+    b.set(1);
+    await Promise.resolve();
+    // Outer should NOT re-run when only b changes
+    expect(outerFn).toHaveBeenCalledTimes(1);
+  });
+});
