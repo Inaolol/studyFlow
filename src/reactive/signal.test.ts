@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { signal, effect } from './signal';
+import { signal, effect, computed } from './signal';
 
 describe('signal', () => {
   it('returns the initial value when read', () => {
@@ -46,5 +46,46 @@ describe('signal', () => {
     count.set(0);
     await Promise.resolve();
     expect(fn).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('batching', () => {
+  it('coalesces multiple writes in the same tick into one effect run', async () => {
+    const a = signal(0);
+    const fn = vi.fn(() => { a(); });
+    effect(fn);
+    a.set(1);
+    a.set(2);
+    a.set(3);
+    expect(fn).toHaveBeenCalledTimes(1); // not yet flushed
+    await Promise.resolve();
+    expect(fn).toHaveBeenCalledTimes(2); // initial + one batched
+  });
+});
+
+describe('computed', () => {
+  it('returns the derived value', () => {
+    const n = signal(2);
+    const doubled = computed(() => n() * 2);
+    expect(doubled()).toBe(4);
+  });
+
+  it('recomputes after a dependency changes', async () => {
+    const n = signal(2);
+    const doubled = computed(() => n() * 2);
+    expect(doubled()).toBe(4);
+    n.set(5);
+    await Promise.resolve();
+    expect(doubled()).toBe(10);
+  });
+
+  it('caches the result between dependency changes', () => {
+    const n = signal(2);
+    const compute = vi.fn(() => n() * 2);
+    const doubled = computed(compute);
+    doubled();
+    doubled();
+    doubled();
+    expect(compute).toHaveBeenCalledTimes(1);
   });
 });
