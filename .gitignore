@@ -8,6 +8,8 @@ output/
 docs/report-assets.md
 docs/word-report-agent-prompt.md
 docs/*notes.md
+docs/superpowers/
+
 
 # Build and dependencies
 node_modules
@@ -16,6 +18,7 @@ dist
 coverage
 playwright-report
 test-results
+.github/workflows/ci.yml
 
 # Environment and OS
 .DS_Store
