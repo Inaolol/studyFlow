@@ -1,31 +1,47 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="StudyFlow is a simple study planner for tracking subjects, tasks, deadlines, and weekly workload." />
+  <meta name="theme-color" content="#fff6f0" />
   <title>StudyFlow</title>
-  <link rel="stylesheet" href="styles.css" />
+  <script>
+    // Apply theme before CSS loads to avoid FOUC.
+    (function () {
+      try {
+        var raw = localStorage.getItem('studyflow:v1');
+        var theme = 'system';
+        if (raw) { var s = JSON.parse(raw); if (s && s.settings && s.settings.theme) theme = s.settings.theme; }
+        var resolved = theme;
+        if (theme === 'system') {
+          resolved = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', resolved);
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
+  <link rel="stylesheet" href="/src/styles/tokens.css" />
+  <link rel="stylesheet" href="/src/styles/base.css" />
+  <link rel="stylesheet" href="/src/styles/layout.css" />
+  <link rel="stylesheet" href="/src/styles/components.css" />
+  <link rel="stylesheet" href="/src/styles/animations.css" />
 </head>
 <body>
-  <!-- Main navigation is shared by every view in the single-page website. -->
   <header class="site-header" id="site-header">
     <a href="#home" class="logo" aria-label="StudyFlow home">
       <span class="logo-mark" aria-hidden="true"></span>
       StudyFlow
     </a>
-
     <nav class="nav-links" aria-label="Main navigation">
       <a href="#home" data-route="home">Home</a>
       <a href="#today" data-route="today">Today</a>
       <a href="#subjects" data-route="subjects">Subjects</a>
       <a href="#calendar" data-route="calendar">Calendar</a>
     </nav>
-
     <div class="landing-actions" aria-label="Landing actions">
       <button class="btn btn-primary btn-sm" id="landing-start" type="button">Start planning</button>
     </div>
-
     <div class="header-actions" aria-label="Application actions">
       <button class="btn btn-ghost btn-icon" type="button" aria-label="Search">
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -38,12 +54,9 @@
     </div>
   </header>
 
-  <!-- JavaScript renders the current view here based on the URL hash. -->
   <main id="app" tabindex="-1"></main>
-
-  <!-- Modal markup is generated here when users add tasks or subjects. -->
   <div id="modal-root"></div>
 
-  <script src="script.js"></script>
+  <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
