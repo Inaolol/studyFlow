@@ -19,24 +19,43 @@ export function createStore(initial?: PersistedState): Store {
   };
 
   let timeout: ReturnType<typeof setTimeout> | null = null;
+  let pending: PersistedState | null = null;
+  let firstRun = true;
+
+  const flush = (): void => {
+    if (pending === null) return;
+    if (timeout !== null) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+    try {
+      localStorage.setItem(NEW_KEY, JSON.stringify(pending));
+    } catch (err) {
+      console.warn('Failed to persist StudyFlow state', err);
+    }
+    pending = null;
+  };
+
   effect(() => {
-    // Read all signals so the effect re-runs on any change.
-    const snapshot: PersistedState = {
+    const snap: PersistedState = {
       schemaVersion: 1,
       subjects: store.subjects(),
       tasks: store.tasks(),
       sessions: store.sessions(),
       settings: store.settings(),
     };
+    if (firstRun) {
+      firstRun = false;
+      return;
+    }
+    pending = snap;
     if (timeout !== null) clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      try {
-        localStorage.setItem(NEW_KEY, JSON.stringify(snapshot));
-      } catch (err) {
-        console.warn('Failed to persist StudyFlow state', err);
-      }
-    }, 200);
+    timeout = setTimeout(flush, 200);
   });
+
+  if (typeof window !== 'undefined') {
+    window.addEventListener('pagehide', flush);
+  }
 
   return store;
 }
