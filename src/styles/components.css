@@ -1345,3 +1345,12 @@
 .settings-form legend { padding: 0 .5rem; font-weight: 600; }
 .settings-form label { display: flex; gap: .5rem; align-items: center; margin: .25rem 0; }
 .settings-form input[type="number"] { width: 5rem; }
+
+.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; }
+.kpi__label { font-size: 0.75rem; color: var(--text-muted, #888); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+.kpi__value { font-size: 1.75rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.screen-stats { padding: 2rem; }
+.stats-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+.stats-grid .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; }
