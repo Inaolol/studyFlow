@@ -28,8 +28,8 @@ function mountRoute(route: Route, store: Store, router: Router, host: HTMLElemen
     case 'home': return renderHome(host, store, router);
     case 'today': return renderToday(host, store, router);
     case 'subjects': return renderSubjects(host, store, router);
-    case 'calendar':  return renderCalendar(host, store, router);
-    case 'stats':     return renderStats(host, store, router);
-    case 'settings':  return renderSettings(host, store, router);
+    case 'calendar': return renderCalendar(host, store, router);
+    case 'stats': return renderStats(host, store, router);
+    case 'settings': return renderSettings(host, store, router);
   }
 }
