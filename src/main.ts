@@ -5,6 +5,8 @@ import { renderHome } from '@/ui/screens/home';
 import { renderToday } from '@/ui/screens/today';
 import { renderSubjects } from '@/ui/screens/subjects';
 import { renderCalendar } from '@/ui/screens/calendar';
+import { renderStats } from '@/ui/screens/stats';
+import { renderSettings } from '@/ui/screens/settings';
 import type { Route, Router } from '@/ui/router';
 import type { Store } from '@/domain/store';
 
@@ -26,6 +28,8 @@ function mountRoute(route: Route, store: Store, router: Router, host: HTMLElemen
     case 'home': return renderHome(host, store, router);
     case 'today': return renderToday(host, store, router);
     case 'subjects': return renderSubjects(host, store, router);
-    case 'calendar': return renderCalendar(host, store, router);
+    case 'calendar':  return renderCalendar(host, store, router);
+    case 'stats':     return renderStats(host, store, router);
+    case 'settings':  return renderSettings(host, store, router);
   }
 }

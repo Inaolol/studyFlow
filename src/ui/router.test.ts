@@ -22,3 +22,12 @@ describe('parseRoute', () => {
     });
   }
 });
+
+describe('parseRoute — phase 2', () => {
+  it('routes #/settings to settings', () => {
+    expect(parseRoute('#/settings')).toEqual({ name: 'settings' });
+  });
+  it('routes #/stats to stats', () => {
+    expect(parseRoute('#/stats')).toEqual({ name: 'stats' });
+  });
+});

@@ -1,12 +1,12 @@
 import { signal, type Signal } from '@/reactive/signal';
 
-export type RouteName = 'home' | 'today' | 'subjects' | 'calendar';
+export type RouteName = 'home' | 'today' | 'subjects' | 'calendar' | 'settings' | 'stats';
 
 export interface Route {
   name: RouteName;
 }
 
-const VALID = new Set<RouteName>(['home', 'today', 'subjects', 'calendar']);
+const VALID = new Set<RouteName>(['home', 'today', 'subjects', 'calendar', 'settings', 'stats']);
 
 export function parseRoute(hash: string): Route {
   const cleaned = hash.replace(/^#\/?/, '').trim();
