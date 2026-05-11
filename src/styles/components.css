@@ -1339,3 +1339,9 @@
   color: var(--accent, currentColor);
 }
 .task-row__start:hover { background: var(--surface-hover, rgba(0,0,0,0.04)); }
+
+.screen-settings { padding: 2rem; max-width: 36rem; }
+.settings-form fieldset { border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin: 0 0 1rem; }
+.settings-form legend { padding: 0 .5rem; font-weight: 600; }
+.settings-form label { display: flex; gap: .5rem; align-items: center; margin: .25rem 0; }
+.settings-form input[type="number"] { width: 5rem; }
