@@ -29,6 +29,18 @@ export interface Session {
   completed: boolean;
 }
 
+export interface ActivePomodoro {
+  taskId: ID | null;
+  subjectId: ID | null;
+  kind: 'work' | 'short-break' | 'long-break';
+  startedAt: number;
+  plannedDurationMs: number;
+  cycleIndex: number;
+  paused: boolean;
+  pausedAt: number | null;
+  accumulatedPauseMs: number;
+}
+
 export type Theme = 'system' | 'light' | 'dark';
 export type ReducedMotionPref = 'system' | 'on' | 'off';
 export type WeekStart = 0 | 1;
