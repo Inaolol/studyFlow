@@ -36,6 +36,7 @@
   --r-md: 8px;
   --r-lg: 12px;
   --r-xl: 16px;
+  --heatmap-empty: #ece6df;
 }
 
 /* Dark theme overrides */
@@ -50,4 +51,5 @@
   --near-white: #1f1f1f;
   --white: #1a1a1a;
   --cream: #1a1a1a;
+  --heatmap-empty: #2a2a2a;
 }

@@ -1354,3 +1354,5 @@
 .stats-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
 .stats-grid .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; }
+.stats-grid [data-card="heatmap"] { grid-column: 1 / -1; overflow-x: auto; }
+.stats-grid .card h3 { margin: 0 0 0.5rem; font-size: 0.95rem; opacity: 0.8; }

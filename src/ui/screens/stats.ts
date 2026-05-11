@@ -2,6 +2,7 @@ import { effect } from '@/reactive/signal';
 import type { Store } from '@/domain/store';
 import type { Router } from '@/ui/router';
 import { kpis } from '@/domain/stats';
+import { renderHeatmap } from '@/ui/widgets/charts/heatmap';
 
 export function renderStats(host: HTMLElement, store: Store, _router: Router): () => void {
   host.innerHTML = `
@@ -14,8 +15,26 @@ export function renderStats(host: HTMLElement, store: Store, _router: Router): (
 
   const stops: Array<() => void> = [];
   stops.push(effect(() => renderKpis(host, store)));
+  stops.push(effect(() => {
+    const grid = host.querySelector<HTMLElement>('#stats-grid');
+    if (!grid) return;
+    const card = ensureCard(grid, 'heatmap', '365-day focus');
+    card.querySelector<HTMLElement>('.card__body')!.innerHTML = renderHeatmap(store.sessions(), Date.now());
+  }));
 
   return () => { stops.forEach(s => s()); host.innerHTML = ''; };
+}
+
+function ensureCard(grid: HTMLElement, id: string, title: string): HTMLElement {
+  let card = grid.querySelector<HTMLElement>(`[data-card="${id}"]`);
+  if (!card) {
+    card = document.createElement('div');
+    card.className = 'card';
+    card.setAttribute('data-card', id);
+    card.innerHTML = `<h3>${title}</h3><div class="card__body"></div>`;
+    grid.appendChild(card);
+  }
+  return card;
 }
 
 function renderKpis(host: HTMLElement, store: Store): void {
