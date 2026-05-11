@@ -5,6 +5,7 @@ export interface TaskRowDeps {
   getSubject: (id: string | null) => Subject | undefined;
   onToggle: (next: Task) => void;
   onDelete: (id: string) => void;
+  onStart?: (task: Task) => void;
 }
 
 export function renderTaskRow(task: Task, deps: TaskRowDeps): HTMLElement {
@@ -25,6 +26,9 @@ export function renderTaskRow(task: Task, deps: TaskRowDeps): HTMLElement {
         ${task.estimatedMinutes ? `<span class="task-row__est">${task.estimatedMinutes} min</span>` : ''}
       </div>
     </div>
+    ${deps.onStart && task.completedAt === null
+      ? `<button class="task-row__start" aria-label="Start pomodoro">▶</button>`
+      : ''}
     <button class="task-row__delete" aria-label="Delete task">×</button>
   `;
 
@@ -32,6 +36,8 @@ export function renderTaskRow(task: Task, deps: TaskRowDeps): HTMLElement {
   check.addEventListener('change', () => {
     deps.onToggle(check.checked ? completeTask(task) : uncompleteTask(task));
   });
+  const startBtn = row.querySelector<HTMLButtonElement>('.task-row__start');
+  if (startBtn) startBtn.addEventListener('click', () => deps.onStart!(task));
   row.querySelector<HTMLButtonElement>('.task-row__delete')!.addEventListener('click', () => {
     deps.onDelete(task.id);
   });

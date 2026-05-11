@@ -6,6 +6,7 @@ import { isOverdue, startOfDay, addDays } from '@/domain/dates';
 import { subjectsById } from '@/domain/subjects';
 import { renderTaskRow } from '@/ui/widgets/task-row';
 import { openTaskModal } from './today.modal';
+import { toast } from '@/ui/toast';
 
 export function renderToday(host: HTMLElement, store: Store, _router: Router): () => void {
   const filter = signal<TaskFilter>({ type: 'today' });
@@ -121,6 +122,22 @@ function renderList(host: HTMLElement, store: Store, filter: TaskFilter): void {
       },
       onDelete: id => {
         store.tasks.set(store.tasks().filter(t => t.id !== id));
+      },
+      onStart: task => {
+        if (store.active() !== null) {
+          toast('A pomodoro is already running.');
+          return;
+        }
+        const settings = store.settings();
+        store.active.set({
+          taskId: task.id,
+          subjectId: task.subjectId,
+          kind: 'work',
+          startedAt: Date.now(),
+          plannedDurationMs: settings.pomodoro.workMin * 60_000,
+          cycleIndex: 0,
+          paused: false, pausedAt: null, accumulatedPauseMs: 0,
+        });
       },
     }));
   }

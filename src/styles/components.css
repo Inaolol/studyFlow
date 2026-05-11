@@ -1328,3 +1328,14 @@
 .pomodoro__clock { font-size: 2rem; font-variant-numeric: tabular-nums; margin: 0.25rem 0; }
 .pomodoro__controls { display: flex; gap: 0.5rem; }
 .pomodoro__controls button { font-size: 0.85rem; padding: 0.35rem 0.75rem; }
+
+.task-row__start {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.15rem 0.5rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--accent, currentColor);
+}
+.task-row__start:hover { background: var(--surface-hover, rgba(0,0,0,0.04)); }
