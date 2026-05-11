@@ -8,6 +8,9 @@ import { renderCalendar } from '@/ui/screens/calendar';
 import { renderStats } from '@/ui/screens/stats';
 import { renderSettings } from '@/ui/screens/settings';
 import { mountPomodoro, recoverActive } from '@/ui/widgets/pomodoro';
+import { installShortcuts } from '@/ui/shortcuts';
+import { helpOverlay } from '@/ui/widgets/help-overlay';
+import { openTaskModal } from '@/ui/screens/today.modal';
 import type { Route, Router } from '@/ui/router';
 import type { Store } from '@/domain/store';
 
@@ -43,6 +46,19 @@ effect(() => {
 
 mountPomodoro(document.body, store);
 recoverActive(store);
+
+helpOverlay.mount();
+installShortcuts(router, {
+  newTask: () => {
+    if (router.current().name !== 'today') router.navigate('today');
+    openTaskModal({ store });
+  },
+  focusSearch: () => {
+    if (router.current().name !== 'today') router.navigate('today');
+    requestAnimationFrame(() => document.querySelector<HTMLInputElement>('#task-search')?.focus());
+  },
+  toggleHelp: () => helpOverlay.toggle(),
+});
 
 function mountRoute(route: Route, store: Store, router: Router, host: HTMLElement): () => void {
   switch (route.name) {

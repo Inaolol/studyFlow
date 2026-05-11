@@ -1366,3 +1366,9 @@
 .leaderboard li { display: grid; grid-template-columns: auto 1fr auto auto; gap: .75rem; align-items: center; padding: .35rem 0; border-bottom: 1px solid var(--border); }
 .lb__focus, .lb__rate { font-variant-numeric: tabular-nums; opacity: .8; font-size: .9rem; }
 .stats-grid [data-card="leaderboard"] { grid-column: 1 / -1; }
+
+.help-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; align-items: center; justify-content: center; z-index: 100; }
+.help-overlay.is-open { display: flex; }
+.help-overlay__panel { background: var(--surface); border-radius: 14px; padding: 1.5rem 2rem; min-width: 24rem; }
+.help-overlay dl { display: grid; grid-template-columns: auto 1fr; gap: .25rem 1rem; }
+kbd { background: var(--border); padding: 1px 6px; border-radius: 4px; font-family: ui-monospace, monospace; }
