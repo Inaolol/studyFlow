@@ -16,6 +16,23 @@ const router = createRouter();
 const root = document.getElementById('app');
 if (!root) throw new Error('#app mount point missing');
 
+const themeMql = matchMedia('(prefers-color-scheme: dark)');
+const reduceMql = matchMedia('(prefers-reduced-motion: reduce)');
+
+effect(() => {
+  const { theme, reducedMotion } = store.settings();
+  const resolvedTheme = theme === 'system' ? (themeMql.matches ? 'dark' : 'light') : theme;
+  document.documentElement.setAttribute('data-theme', resolvedTheme);
+  const resolvedRM =
+    reducedMotion === 'system' ? (reduceMql.matches ? 'on' : 'off') :
+    reducedMotion;
+  document.documentElement.setAttribute('data-reduced-motion', resolvedRM);
+});
+
+// Re-trigger when OS preference changes while user is in "system" mode.
+themeMql.addEventListener('change', () => { store.settings.set({ ...store.settings() }); });
+reduceMql.addEventListener('change', () => { store.settings.set({ ...store.settings() }); });
+
 let dispose: (() => void) | null = null;
 
 effect(() => {
