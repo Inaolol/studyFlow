@@ -112,6 +112,40 @@ export function mountPomodoro(host: HTMLElement, store: Store): () => void {
   };
 }
 
+export function recoverActive(store: Store): void {
+  const a = store.active();
+  if (!a) return;
+  const now = Date.now();
+  if (isComplete(a, now)) {
+    if (a.kind === 'work') {
+      store.sessions.set([...store.sessions(), buildSession({
+        id: crypto.randomUUID(),
+        taskId: a.taskId, subjectId: a.subjectId,
+        startedAt: a.startedAt, endedAt: a.startedAt + a.plannedDurationMs,
+        plannedDurationMs: a.plannedDurationMs,
+        kind: 'work', completed: true,
+      })]);
+    }
+    store.active.set(null);
+    toast('Pomodoro that finished while away has been recorded.');
+    return;
+  }
+  const elapsedMin = Math.floor((now - a.startedAt - a.accumulatedPauseMs) / 60_000);
+  const keep = confirm(`A ${a.kind} pomodoro was running (~${elapsedMin}m elapsed). Resume?`);
+  if (!keep) {
+    if (a.kind === 'work') {
+      store.sessions.set([...store.sessions(), buildSession({
+        id: crypto.randomUUID(),
+        taskId: a.taskId, subjectId: a.subjectId,
+        startedAt: a.startedAt, endedAt: now,
+        plannedDurationMs: a.plannedDurationMs,
+        kind: 'work', completed: false,
+      })]);
+    }
+    store.active.set(null);
+  }
+}
+
 function escape(s: string): string {
   return s.replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]!));
 }
