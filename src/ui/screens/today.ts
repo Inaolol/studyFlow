@@ -10,6 +10,7 @@ import { toast } from '@/ui/toast';
 
 export function renderToday(host: HTMLElement, store: Store, _router: Router): () => void {
   const filter = signal<TaskFilter>({ type: 'today' });
+  const query = signal<string>('');
 
   host.innerHTML = `
     <section class="dashboard">
@@ -18,6 +19,7 @@ export function renderToday(host: HTMLElement, store: Store, _router: Router): (
         <div class="kpis" id="kpis"></div>
         <div class="dashboard__header">
           <h2 id="dashboard-title"></h2>
+          <input id="task-search" type="search" placeholder="Search tasks" aria-label="Search tasks" />
           <button class="btn btn--primary" id="add-task">+ New task</button>
         </div>
         <div id="task-list"></div>
@@ -29,9 +31,14 @@ export function renderToday(host: HTMLElement, store: Store, _router: Router): (
     openTaskModal({ store });
   });
 
+  const search = host.querySelector<HTMLInputElement>('#task-search');
+  if (search) {
+    search.addEventListener('input', () => query.set(search.value));
+  }
+
   const stop1 = effect(() => renderSidebar(host, store, filter));
   const stop2 = effect(() => renderKpis(host, store));
-  const stop3 = effect(() => renderList(host, store, filter()));
+  const stop3 = effect(() => renderList(host, store, filter(), query()));
 
   return () => { stop1(); stop2(); stop3(); host.innerHTML = ''; };
 }
@@ -102,12 +109,19 @@ function renderKpis(host: HTMLElement, store: Store): void {
   `;
 }
 
-function renderList(host: HTMLElement, store: Store, filter: TaskFilter): void {
+function renderList(host: HTMLElement, store: Store, filter: TaskFilter, q: string): void {
   const list = host.querySelector<HTMLElement>('#task-list');
   const title = host.querySelector<HTMLElement>('#dashboard-title');
   if (!list || !title) return;
   const sb = subjectsById(store.subjects());
-  const tasks = filterTasks(store.tasks(), filter);
+  let tasks = filterTasks(store.tasks(), filter);
+  if (q.trim() !== '') {
+    const needle = q.toLowerCase();
+    tasks = tasks.filter(t =>
+      t.title.toLowerCase().includes(needle) ||
+      (t.notes ?? '').toLowerCase().includes(needle)
+    );
+  }
   title.textContent = titleFor(filter, store);
   if (tasks.length === 0) {
     list.innerHTML = `<div class="empty-state">No tasks here. Press <kbd>+ New task</kbd> to add one.</div>`;

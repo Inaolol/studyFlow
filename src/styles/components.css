@@ -1372,3 +1372,15 @@
 .help-overlay__panel { background: var(--surface); border-radius: 14px; padding: 1.5rem 2rem; min-width: 24rem; }
 .help-overlay dl { display: grid; grid-template-columns: auto 1fr; gap: .25rem 1rem; }
 kbd { background: var(--border); padding: 1px 6px; border-radius: 4px; font-family: ui-monospace, monospace; }
+
+.dashboard__header { display: flex; gap: 0.75rem; align-items: center; }
+.dashboard__header h2 { margin-right: auto; }
+#task-search {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: inherit;
+  font-size: 0.9rem;
+  min-width: 14rem;
+}
