@@ -1361,3 +1361,8 @@
 .donut__legend { list-style: none; padding: 0; margin: 0; font-size: .9rem; }
 .donut__legend li { display: flex; align-items: center; gap: .5rem; margin: .15rem 0; }
 .donut__legend .dot, .leaderboard .dot { width: .75rem; height: .75rem; border-radius: 50%; display: inline-block; }
+
+.leaderboard { list-style: none; padding: 0; margin: 0; }
+.leaderboard li { display: grid; grid-template-columns: auto 1fr auto auto; gap: .75rem; align-items: center; padding: .35rem 0; border-bottom: 1px solid var(--border); }
+.lb__focus, .lb__rate { font-variant-numeric: tabular-nums; opacity: .8; font-size: .9rem; }
+.stats-grid [data-card="leaderboard"] { grid-column: 1 / -1; }

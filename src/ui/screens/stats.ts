@@ -1,7 +1,7 @@
 import { effect } from '@/reactive/signal';
 import type { Store } from '@/domain/store';
 import type { Router } from '@/ui/router';
-import { kpis } from '@/domain/stats';
+import { kpis, subjectLeaderboard } from '@/domain/stats';
 import { renderHeatmap } from '@/ui/widgets/charts/heatmap';
 import { mountTasksPerDayBar } from '@/ui/widgets/charts/bar-uplot';
 import { renderDonut } from '@/ui/widgets/charts/donut';
@@ -54,6 +54,23 @@ export function renderStats(host: HTMLElement, store: Store, _router: Router): (
     card.querySelector<HTMLElement>('.card__body')!.innerHTML = renderHourHistogram(store.sessions());
   }));
 
+  stops.push(effect(() => {
+    const grid = host.querySelector<HTMLElement>('#stats-grid');
+    if (!grid) return;
+    const card = ensureCard(grid, 'leaderboard', 'Subject leaderboard');
+    const today = startOfDay(Date.now());
+    const rows = subjectLeaderboard(store.subjects(), store.tasks(), store.sessions(), addDays(today, -29), addDays(today, 1));
+    card.querySelector<HTMLElement>('.card__body')!.innerHTML = rows.length === 0
+      ? `<div class="empty-state">Add subjects and complete some sessions to populate.</div>`
+      : `<ol class="leaderboard">${rows.map(r => `
+          <li>
+            <span class="dot" style="background:${r.subject.color}"></span>
+            <span class="lb__name">${escapeHtml(r.subject.name)}</span>
+            <span class="lb__focus">${Math.round(r.focusMinutes)} min</span>
+            <span class="lb__rate">${Math.round(r.completionRate * 100)}% done</span>
+          </li>`).join('')}</ol>`;
+  }));
+
   return () => { stops.forEach(s => s()); host.innerHTML = ''; };
 }
 
@@ -67,6 +84,10 @@ function ensureCard(grid: HTMLElement, id: string, title: string): HTMLElement {
     grid.appendChild(card);
   }
   return card;
+}
+
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]!));
 }
 
 function renderKpis(host: HTMLElement, store: Store): void {
