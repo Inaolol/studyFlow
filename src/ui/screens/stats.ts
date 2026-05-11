@@ -6,6 +6,7 @@ import { renderHeatmap } from '@/ui/widgets/charts/heatmap';
 import { mountTasksPerDayBar } from '@/ui/widgets/charts/bar-uplot';
 import { renderDonut } from '@/ui/widgets/charts/donut';
 import { mountWeeklyFocusLine } from '@/ui/widgets/charts/line-uplot';
+import { renderHourHistogram } from '@/ui/widgets/charts/histogram';
 import { startOfDay, addDays } from '@/domain/dates';
 
 export function renderStats(host: HTMLElement, store: Store, _router: Router): () => void {
@@ -45,6 +46,12 @@ export function renderStats(host: HTMLElement, store: Store, _router: Router): (
     const today = startOfDay(Date.now());
     card.querySelector<HTMLElement>('.card__body')!.innerHTML =
       renderDonut(store.subjects(), store.sessions(), addDays(today, -29), addDays(today, 1));
+  }));
+  stops.push(effect(() => {
+    const grid = host.querySelector<HTMLElement>('#stats-grid');
+    if (!grid) return;
+    const card = ensureCard(grid, 'histogram', 'Focus by hour');
+    card.querySelector<HTMLElement>('.card__body')!.innerHTML = renderHourHistogram(store.sessions());
   }));
 
   return () => { stops.forEach(s => s()); host.innerHTML = ''; };
