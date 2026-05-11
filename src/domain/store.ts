@@ -1,5 +1,5 @@
 import { signal, effect, type Signal } from '@/reactive/signal';
-import type { PersistedState, Subject, Task, Session, Settings } from './types';
+import type { PersistedState, Subject, Task, Session, Settings, ActivePomodoro } from './types';
 import { loadAndMigrate, NEW_KEY } from './migrations';
 
 export interface Store {
@@ -7,6 +7,7 @@ export interface Store {
   tasks: Signal<Task[]>;
   sessions: Signal<Session[]>;
   settings: Signal<Settings>;
+  active: Signal<ActivePomodoro | null>;
 }
 
 export function createStore(initial?: PersistedState): Store {
@@ -16,6 +17,7 @@ export function createStore(initial?: PersistedState): Store {
     tasks: signal(state.tasks),
     sessions: signal(state.sessions),
     settings: signal(state.settings),
+    active: signal(state.active ?? null),
   };
 
   let timeout: ReturnType<typeof setTimeout> | null = null;
@@ -43,6 +45,7 @@ export function createStore(initial?: PersistedState): Store {
       tasks: store.tasks(),
       sessions: store.sessions(),
       settings: store.settings(),
+      active: store.active(),
     };
     if (firstRun) {
       firstRun = false;
@@ -67,5 +70,6 @@ export function snapshot(store: Store): PersistedState {
     tasks: store.tasks(),
     sessions: store.sessions(),
     settings: store.settings(),
+    active: store.active(),
   };
 }

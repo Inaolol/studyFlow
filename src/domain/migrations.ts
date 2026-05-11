@@ -91,6 +91,7 @@ function migrateLegacy(raw: unknown, now: number): PersistedState {
     tasks,
     sessions: [],
     settings: DEFAULT_SETTINGS,
+    active: null,
   };
 }
 

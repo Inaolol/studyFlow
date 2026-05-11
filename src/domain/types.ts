@@ -63,6 +63,7 @@ export interface PersistedState {
   tasks: Task[];
   sessions: Session[];
   settings: Settings;
+  active?: ActivePomodoro | null;   // optional for back-compat reads
 }
 
 export const CURRENT_SCHEMA_VERSION = 1;
