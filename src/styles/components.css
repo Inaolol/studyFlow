@@ -1319,3 +1319,12 @@
 }
 .toast--error { border-color: var(--accent); }
 @keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.pomodoro { position: fixed; bottom: 1rem; right: 1rem; min-width: 16rem;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 0.75rem 1rem; box-shadow: 0 6px 20px rgba(0,0,0,.18); display: none; z-index: 50; }
+.pomodoro.is-active { display: block; }
+.pomodoro__label { font-size: 0.8rem; opacity: 0.7; text-transform: capitalize; }
+.pomodoro__clock { font-size: 2rem; font-variant-numeric: tabular-nums; margin: 0.25rem 0; }
+.pomodoro__controls { display: flex; gap: 0.5rem; }
+.pomodoro__controls button { font-size: 0.85rem; padding: 0.35rem 0.75rem; }

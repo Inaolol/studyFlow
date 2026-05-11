@@ -7,6 +7,7 @@ import { renderSubjects } from '@/ui/screens/subjects';
 import { renderCalendar } from '@/ui/screens/calendar';
 import { renderStats } from '@/ui/screens/stats';
 import { renderSettings } from '@/ui/screens/settings';
+import { mountPomodoro } from '@/ui/widgets/pomodoro';
 import type { Route, Router } from '@/ui/router';
 import type { Store } from '@/domain/store';
 
@@ -22,6 +23,8 @@ effect(() => {
   if (dispose) { dispose(); dispose = null; }
   dispose = mountRoute(route, store, router, root);
 });
+
+mountPomodoro(document.body, store);
 
 function mountRoute(route: Route, store: Store, router: Router, host: HTMLElement): () => void {
   switch (route.name) {
