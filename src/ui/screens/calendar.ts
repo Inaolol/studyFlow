@@ -46,6 +46,12 @@ function render(host: HTMLElement, store: Store, ws: number): void {
       .reduce((s, t) => s + (t.estimatedMinutes ?? 0), 0),
   ));
 
+  const hasDueTasks = store.tasks().some(t => t.dueAt !== null);
+  if (!hasDueTasks) {
+    grid.innerHTML = `<div class="empty-state">Nothing scheduled. Add a task with a due date to see it here.</div>`;
+    return;
+  }
+
   grid.innerHTML = days.map(d => {
     const tasks = tasksByDay.get(d) ?? [];
     const load = tasks.filter(t => t.completedAt === null).reduce((s, t) => s + (t.estimatedMinutes ?? 0), 0);

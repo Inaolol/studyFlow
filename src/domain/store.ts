@@ -1,6 +1,7 @@
 import { signal, effect, type Signal } from '@/reactive/signal';
 import type { PersistedState, Subject, Task, Session, Settings, ActivePomodoro } from './types';
 import { loadAndMigrate, NEW_KEY } from './migrations';
+import { toast } from '@/ui/toast';
 
 export interface Store {
   subjects: Signal<Subject[]>;
@@ -34,6 +35,7 @@ export function createStore(initial?: PersistedState): Store {
       localStorage.setItem(NEW_KEY, JSON.stringify(pending));
     } catch (err) {
       console.warn('Failed to persist StudyFlow state', err);
+      toast('Could not save — local storage is full.', 'error');
     }
     pending = null;
   };

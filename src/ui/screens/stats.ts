@@ -20,28 +20,42 @@ export function renderStats(host: HTMLElement, store: Store, _router: Router): (
 
   const stops: Array<() => void> = [];
   stops.push(effect(() => renderKpis(host, store)));
+
+  const isEmpty = (): boolean => store.sessions().length === 0 && store.tasks().length === 0;
+
   stops.push(effect(() => {
     const grid = host.querySelector<HTMLElement>('#stats-grid');
     if (!grid) return;
+    grid.classList.toggle('is-empty', isEmpty());
+    if (isEmpty()) {
+      grid.innerHTML = `<div class="card stats-empty">
+      <p class="empty-state">No data yet. Add a task or start a pomodoro to see your stats grow.</p>
+    </div>`;
+    }
+  }));
+
+  stops.push(effect(() => {
+    const grid = host.querySelector<HTMLElement>('#stats-grid');
+    if (!grid || grid.classList.contains('is-empty')) return;
     const card = ensureCard(grid, 'heatmap', '365-day focus');
     card.querySelector<HTMLElement>('.card__body')!.innerHTML = renderHeatmap(store.sessions(), Date.now());
   }));
   stops.push(effect(() => {
     const grid = host.querySelector<HTMLElement>('#stats-grid');
-    if (!grid) return;
+    if (!grid || grid.classList.contains('is-empty')) return;
     const card = ensureCard(grid, 'bar', 'Tasks completed · last 30 days');
     const body = card.querySelector<HTMLElement>('.card__body')!;
     return mountTasksPerDayBar(body, store.tasks(), Date.now());
   }));
   stops.push(effect(() => {
     const grid = host.querySelector<HTMLElement>('#stats-grid');
-    if (!grid) return;
+    if (!grid || grid.classList.contains('is-empty')) return;
     const card = ensureCard(grid, 'line', 'Weekly focus · last 12 weeks');
     return mountWeeklyFocusLine(card.querySelector<HTMLElement>('.card__body')!, store.sessions(), store.settings().weekStartsOn, Date.now());
   }));
   stops.push(effect(() => {
     const grid = host.querySelector<HTMLElement>('#stats-grid');
-    if (!grid) return;
+    if (!grid || grid.classList.contains('is-empty')) return;
     const card = ensureCard(grid, 'donut', 'Time on subject · last 30 days');
     const today = startOfDay(Date.now());
     card.querySelector<HTMLElement>('.card__body')!.innerHTML =
@@ -49,14 +63,14 @@ export function renderStats(host: HTMLElement, store: Store, _router: Router): (
   }));
   stops.push(effect(() => {
     const grid = host.querySelector<HTMLElement>('#stats-grid');
-    if (!grid) return;
+    if (!grid || grid.classList.contains('is-empty')) return;
     const card = ensureCard(grid, 'histogram', 'Focus by hour');
     card.querySelector<HTMLElement>('.card__body')!.innerHTML = renderHourHistogram(store.sessions());
   }));
 
   stops.push(effect(() => {
     const grid = host.querySelector<HTMLElement>('#stats-grid');
-    if (!grid) return;
+    if (!grid || grid.classList.contains('is-empty')) return;
     const card = ensureCard(grid, 'leaderboard', 'Subject leaderboard');
     const today = startOfDay(Date.now());
     const rows = subjectLeaderboard(store.subjects(), store.tasks(), store.sessions(), addDays(today, -29), addDays(today, 1));
