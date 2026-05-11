@@ -3,6 +3,7 @@ import type { Store } from '@/domain/store';
 import type { Router } from '@/ui/router';
 import { kpis } from '@/domain/stats';
 import { renderHeatmap } from '@/ui/widgets/charts/heatmap';
+import { mountTasksPerDayBar } from '@/ui/widgets/charts/bar-uplot';
 
 export function renderStats(host: HTMLElement, store: Store, _router: Router): () => void {
   host.innerHTML = `
@@ -20,6 +21,13 @@ export function renderStats(host: HTMLElement, store: Store, _router: Router): (
     if (!grid) return;
     const card = ensureCard(grid, 'heatmap', '365-day focus');
     card.querySelector<HTMLElement>('.card__body')!.innerHTML = renderHeatmap(store.sessions(), Date.now());
+  }));
+  stops.push(effect(() => {
+    const grid = host.querySelector<HTMLElement>('#stats-grid');
+    if (!grid) return;
+    const card = ensureCard(grid, 'bar', 'Tasks completed · last 30 days');
+    const body = card.querySelector<HTMLElement>('.card__body')!;
+    return mountTasksPerDayBar(body, store.tasks(), Date.now());
   }));
 
   return () => { stops.forEach(s => s()); host.innerHTML = ''; };
