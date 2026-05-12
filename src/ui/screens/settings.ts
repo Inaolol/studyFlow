@@ -1,7 +1,11 @@
 import { effect } from '@/reactive/signal';
-import type { Store } from '@/domain/store';
+import { snapshot, replaceStore, type Store } from '@/domain/store';
 import type { Router } from '@/ui/router';
 import type { Settings } from '@/domain/types';
+import { exportJSON, parseImport } from '@/domain/io';
+import { exportICal } from '@/domain/ical';
+import { toast } from '@/ui/toast';
+import { NEW_KEY } from '@/domain/migrations';
 
 export function renderSettings(host: HTMLElement, store: Store, _router: Router): () => void {
   host.innerHTML = `
@@ -32,6 +36,28 @@ export function renderSettings(host: HTMLElement, store: Store, _router: Router)
           <label><input type="radio" name="weekStartsOn" value="0"> Sunday</label>
           <label><input type="radio" name="weekStartsOn" value="1"> Monday</label>
         </fieldset>
+        <fieldset>
+          <legend>Data</legend>
+          <p class="settings-hint" id="data-hint">
+            Export a full backup of your tasks, sessions, and subjects.
+            Importing replaces all current data — a backup is saved automatically.
+          </p>
+          <div class="settings-data-actions">
+            <button type="button" id="btn-export-json">Export JSON</button>
+            <label for="import-file" class="btn btn-secondary">Import JSON</label>
+            <input
+              type="file"
+              id="import-file"
+              accept=".json"
+              aria-describedby="import-warning"
+              class="sr-only"
+            >
+            <p id="import-warning" class="settings-hint">
+              Warning: importing replaces all current data. Your existing data is backed up to localStorage first.
+            </p>
+            <button type="button" id="btn-export-ical">Export iCal (.ics)</button>
+          </div>
+        </fieldset>
       </form>
     </section>
   `;
@@ -39,12 +65,59 @@ export function renderSettings(host: HTMLElement, store: Store, _router: Router)
   const form = host.querySelector<HTMLFormElement>('#settings-form')!;
   const stop = effect(() => fillForm(form, store.settings()));
 
-  form.addEventListener('change', () => {
+  form.addEventListener('change', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.id === 'import-file') return;
     const next = readForm(form, store.settings());
     store.settings.set(next);
   });
 
+  host.querySelector('#btn-export-json')!.addEventListener('click', () => {
+    const state = snapshot(store);
+    triggerDownload(exportJSON(state), `studyflow-export-${isoDate()}.json`, 'application/json');
+  });
+
+  const fileInput = host.querySelector<HTMLInputElement>('#import-file')!;
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = reader.result as string;
+      const result = parseImport(text);
+      if (!result.ok) {
+        toast(`Import failed: ${result.reason}`, 'error');
+        fileInput.value = '';
+        return;
+      }
+      const current = localStorage.getItem(NEW_KEY) ?? '';
+      if (current) localStorage.setItem(`studyflow:backup-${Date.now()}`, current);
+      replaceStore(store, result.state);
+      toast('Data imported successfully');
+      fileInput.value = '';
+    };
+    reader.readAsText(file);
+  });
+
+  host.querySelector('#btn-export-ical')!.addEventListener('click', () => {
+    triggerDownload(exportICal(store.tasks()), `studyflow-${isoDate()}.ics`, 'text/calendar');
+  });
+
   return () => { stop(); host.innerHTML = ''; };
+}
+
+function triggerDownload(content: string, filename: string, mimeType: string): void {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function isoDate(): string {
+  return new Date().toISOString().slice(0, 10);
 }
 
 function fillForm(form: HTMLFormElement, s: Settings): void {
@@ -76,10 +149,12 @@ function setRadio(form: HTMLFormElement, name: string, value: string): void {
   const el = form.querySelector<HTMLInputElement>(`input[name="${name}"][value="${value}"]`);
   if (el) el.checked = true;
 }
+
 function setNum(form: HTMLFormElement, name: string, value: number): void {
   const el = form.querySelector<HTMLInputElement>(`input[name="${name}"]`);
   if (el) el.value = String(value);
 }
+
 function clampInt(raw: FormDataEntryValue | null, min: number, max: number, fallback: number): number {
   const n = Number(raw);
   if (!Number.isFinite(n)) return fallback;
