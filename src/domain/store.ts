@@ -75,3 +75,11 @@ export function snapshot(store: Store): PersistedState {
     active: store.active(),
   };
 }
+
+export function replaceStore(store: Store, state: PersistedState): void {
+  store.subjects.set(state.subjects);
+  store.tasks.set(state.tasks);
+  store.sessions.set(state.sessions);
+  store.settings.set(state.settings);
+  store.active.set(state.active ?? null);
+}
