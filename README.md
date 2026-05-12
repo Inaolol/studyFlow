@@ -53,5 +53,10 @@ studyflow/
 * **Subject Control:** Add subjects and assign tasks to them.
 * **Dashboard Filters:** View today, next 7 days, overdue tasks, all tasks, or one subject.
 * **Calendar Planning:** Move between weeks and add tasks for a selected day.
+* **Pomodoro Timer:** Task-bound 25/5/15 timer docked at the viewport bottom; sessions are recorded as first-class records that survive reloads.
+* **Stats Dashboard:** Streak KPIs, 365-day focus heatmap, tasks-per-day bar, time-on-subject donut, weekly focus line, hour-of-day histogram, and subject leaderboard.
+* **Settings:** Theme (system/light/dark), reduced-motion preference, Pomodoro durations, and week-start day.
+* **Keyboard Shortcuts:** `g t/s/c/d` to navigate, `n` for new task, `/` to search, `?` for the help overlay.
+* **Search:** Case-insensitive substring search across task titles and notes on the Today screen.
 * **Visual Feedback:** Progress cards, workload bars, subject colors, and completed task styling show status quickly.
 * **Landing Animation:** CSS keyframes animate the landing headline, buttons, background blobs, and scroll cue.
