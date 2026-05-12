@@ -12,29 +12,35 @@ export function mountPomodoro(host: HTMLElement, store: Store): () => void {
 
   let raf: number | null = null;
   const tick = (): void => {
-    render();
     const a = store.active();
-    if (a && !a.paused) {
-      const now = Date.now();
-      if (isComplete(a, now)) {
-        complete();
-        return;
-      }
+    if (!a) return;
+    updateClock(a);
+    if (!a.paused && isComplete(a, Date.now())) {
+      complete();
+      return;
     }
     raf = requestAnimationFrame(tick);
   };
+
+  function fmtClock(ms: number): string {
+    const mm = String(Math.floor(ms / 60_000)).padStart(2, '0');
+    const ss = String(Math.floor((ms % 60_000) / 1000)).padStart(2, '0');
+    return `${mm}:${ss}`;
+  }
+
+  function updateClock(a: NonNullable<ReturnType<typeof store.active>>): void {
+    const clock = node.querySelector<HTMLElement>('.pomodoro__clock');
+    if (clock) clock.textContent = fmtClock(remainingMs(a, Date.now()));
+  }
 
   function render(): void {
     const a = store.active();
     if (!a) { node.innerHTML = ''; node.classList.remove('is-active'); return; }
     node.classList.add('is-active');
-    const rem = remainingMs(a, Date.now());
-    const mm = String(Math.floor(rem / 60_000)).padStart(2, '0');
-    const ss = String(Math.floor((rem % 60_000) / 1000)).padStart(2, '0');
     const task = a.taskId ? store.tasks().find(t => t.id === a.taskId) : null;
     node.innerHTML = `
       <div class="pomodoro__label">${a.kind.replace('-', ' ')}${task ? ` · ${escape(task.title)}` : ''}</div>
-      <div class="pomodoro__clock" aria-live="off">${mm}:${ss}</div>
+      <div class="pomodoro__clock" aria-live="off">${fmtClock(remainingMs(a, Date.now()))}</div>
       <div class="pomodoro__controls">
         <button data-act="pause">${a.paused ? 'Resume' : 'Pause'}</button>
         <button data-act="abort">Abort</button>
