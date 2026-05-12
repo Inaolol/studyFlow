@@ -96,6 +96,10 @@ export function renderSettings(host: HTMLElement, store: Store, _router: Router)
       toast('Data imported successfully');
       fileInput.value = '';
     };
+    reader.onerror = () => {
+      toast('Failed to read file', 'error');
+      fileInput.value = '';
+    };
     reader.readAsText(file);
   });
 

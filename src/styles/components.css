@@ -1384,3 +1384,17 @@ kbd { background: var(--border); padding: 1px 6px; border-radius: 4px; font-fami
   font-size: 0.9rem;
   min-width: 14rem;
 }
+
+/* Settings: data section */
+.settings-hint {
+  color: var(--neutral-gray);
+  font-size: 13px;
+  margin: 0 0 12px;
+}
+
+.settings-data-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
