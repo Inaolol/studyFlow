@@ -69,7 +69,7 @@ export interface PersistedState {
 export const CURRENT_SCHEMA_VERSION = 1;
 
 export const DEFAULT_SETTINGS: Settings = {
-  theme: 'system',
+  theme: 'light',
   pomodoro: { workMin: 25, shortBreakMin: 5, longBreakMin: 15, longEvery: 4 },
   reducedMotion: 'system',
   weekStartsOn: 1,

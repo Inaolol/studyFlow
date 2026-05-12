@@ -5,9 +5,9 @@ function fmtDate(date: Date): string {
   return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 }
 
-function renderStep(num: string, title: string, text: string, visual: string): string {
+function renderStep(num: string, title: string, text: string, visual: string, id: string): string {
   return `
-    <div class="step-row">
+    <div class="step-row" id="${id}">
       <div class="step-num">${num}</div>
       <div class="step-text">
         <h3>${title}</h3>
@@ -18,40 +18,50 @@ function renderStep(num: string, title: string, text: string, visual: string): s
   `;
 }
 
-function renderSubjectPills(): string {
-  return `
-    <div class="v-pills">
-      <span class="tag tag-coral">Calculus</span>
-      <span class="tag tag-teal">Biology</span>
-      <span class="tag tag-blue">History</span>
-      <span class="tag" style="color:var(--mauve);background:rgba(176,90,142,.08)">Literature</span>
-      <span class="tag tag-green">Spanish</span>
-    </div>
-  `;
-}
+const PILL_VISUAL = `
+  <div class="v-pills">
+    <span class="pill tag tag-coral">Calculus</span>
+    <span class="pill tag tag-teal">Biology</span>
+    <span class="pill tag tag-blue">History</span>
+    <span class="pill tag tag-mauve">Literature</span>
+    <span class="pill tag tag-green">Spanish</span>
+    <span class="pill tag tag-amber">Studio Art</span>
+  </div>
+`;
 
-function renderMiniProgress(): string {
-  return `
-    <div class="v-progress">
-      <div class="row completed"><span class="check checked"></span><span>Lab writeup - enzymes</span></div>
-      <div class="row completed"><span class="check checked"></span><span>Read Hamlet, Act II</span></div>
-      <div class="row completed"><span class="check checked"></span><span>Practice quiz - derivatives</span></div>
-    </div>
-  `;
-}
+const INPUT_VISUAL = `
+  <div class="v-input">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+    <span class="v-input__typed">Read Chapter 4 for History, due Friday</span>
+    <span class="v-input__caret"></span>
+  </div>
+`;
+
+const PROGRESS_VISUAL = `
+  <div class="v-progress">
+    <div class="v-progress__row"><span class="v-progress__ckb"></span><span class="v-progress__lbl">Lab writeup &mdash; enzymes</span></div>
+    <div class="v-progress__row"><span class="v-progress__ckb"></span><span class="v-progress__lbl">Read Hamlet, Act II</span></div>
+    <div class="v-progress__row"><span class="v-progress__ckb"></span><span class="v-progress__lbl">Practice quiz &mdash; derivatives</span></div>
+  </div>
+`;
 
 function buildHTML(): string {
   const todayLabel = fmtDate(new Date());
 
-  const checkedTasks = [
-    { title: 'Read Ch. 12 - Mitochondrial DNA', tagClass: 'tag-teal', subject: 'Biology' },
-    { title: 'Outline essay - Treaty of Versailles', tagClass: 'tag-blue', subject: 'History' },
-    { title: 'Vocabulary - 20 new verbs', tagClass: 'tag-green', subject: 'Spanish' },
+  const previewTasks = [
+    { title: 'Read Ch. 12 &mdash; Mitochondrial DNA', tagClass: 'tag-teal', subject: 'Biology' },
+    { title: 'Outline essay &mdash; Treaty of Versailles', tagClass: 'tag-blue', subject: 'History' },
+    { title: 'Vocabulary &mdash; 20 new verbs', tagClass: 'tag-green', subject: 'Spanish' },
+    { title: 'Problem set 7 &mdash; integration by parts', tagClass: 'tag-coral', subject: 'Calculus' },
   ];
 
-  const checkedRows = checkedTasks.map(({ title, tagClass, subject }) => `
-    <div class="ck-row done">
-      <span class="ck-box checked"></span>
+  const previewRows = previewTasks.map(({ title, tagClass, subject }, i) => `
+    <div class="ck-row" data-row="${i + 1}">
+      <span class="ck-box">
+        <svg width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true">
+          <path d="M1 3.5 4 6.5 10 0.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
       <span class="ck-title">${title}</span>
       <span class="tag ${tagClass}">${subject}</span>
     </div>
@@ -60,12 +70,16 @@ function buildHTML(): string {
   return `
     <section class="home-view">
       <section class="hero">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
+        <div class="blob blob-1" aria-hidden="true"></div>
+        <div class="blob blob-2" aria-hidden="true"></div>
+        <div class="blob blob-3" aria-hidden="true"></div>
         <div class="hero-inner">
-          <div class="hero-eyebrow"><span class="live-dot"></span>Built for students</div>
-          <h1><span class="hero-line">Plan. Study.</span><span class="hero-line accent-word">Breathe.</span></h1>
+          <div class="hero-eyebrow"><span class="live-dot" aria-hidden="true"></span>Built for students</div>
+          <h1 class="hero-title">
+            <span class="word w1">Plan.</span>
+            <span class="word w2">Study.</span>
+            <span class="word w3">Breathe.</span>
+          </h1>
           <p>One simple place for every assignment, deadline, and quiet win.</p>
           <div class="hero-ctas">
             <button class="btn btn-primary btn-lg" data-action="go-today" type="button">Start planning</button>
@@ -79,33 +93,39 @@ function buildHTML(): string {
       </section>
 
       <section class="check-section" id="task-preview" aria-label="Task completion preview">
-        <div class="check-card">
+        <div class="check-card" id="check-card">
           <div class="ck-head">
             <div>
               <div class="ck-day">${todayLabel}</div>
               <h3>Today</h3>
             </div>
-            <div class="ck-pct">75% done</div>
+            <div class="ck-pct" id="ck-pct">0% done</div>
           </div>
-          ${checkedRows}
-          <div class="ck-row">
-            <span class="ck-box"></span>
-            <span class="ck-title">Problem set 7 - integration by parts</span>
-            <span class="tag tag-coral">Calculus</span>
-          </div>
+          ${previewRows}
         </div>
       </section>
 
       <section class="rotator-section">
-        <h2><span class="static">A planner that feels</span><span class="rotator-word">simple, calm, and ready.</span></h2>
+        <h2>
+          <span class="static">A planner that feels</span>
+          <span class="rotator" id="rotator">
+            <span class="rotator-track" id="rotator-track">
+              <span class="rotator-word">simple.</span>
+              <span class="rotator-word">calm.</span>
+              <span class="rotator-word">yours.</span>
+              <span class="rotator-word">ready.</span>
+              <span class="rotator-word">simple.</span>
+            </span>
+          </span>
+        </h2>
       </section>
 
       <section class="how" id="how">
         <div class="how-inner">
-          <h2>From <em>scattered</em> to sorted.</h2>
-          ${renderStep('01', 'Add your subjects.', 'Each course gets a color. Your week becomes scannable at a glance.', renderSubjectPills())}
-          ${renderStep('02', 'Drop in a task.', 'Title, subject, due date, priority, and estimate. Done in seconds.', `<div class="v-input">+ <span>Read Chapter 4 for History, due Friday</span></div>`)}
-          ${renderStep('03', 'Check things off.', 'Progress updates across the dashboard, subjects, and calendar views.', renderMiniProgress())}
+          <h2 class="how-title">From <em>scattered</em> to&nbsp;sorted.</h2>
+          ${renderStep('01', 'Add your subjects.', 'Each course gets a color. Your week becomes scannable at a glance.', PILL_VISUAL, 'step1')}
+          ${renderStep('02', 'Drop in a task.', "Title, subject, due date. That's it. Done in seconds.", INPUT_VISUAL, 'step2')}
+          ${renderStep('03', 'Check things off.', 'Quiet feedback. Honest progress. No streaks-and-confetti theater.', PROGRESS_VISUAL, 'step3')}
         </div>
       </section>
 
@@ -116,23 +136,93 @@ function buildHTML(): string {
       </section>
 
       <footer class="footer">
-        <div class="row gap-3"><span class="logo-mark" style="width:20px;height:20px"></span><span>StudyFlow - 2026</span></div>
+        <div class="row gap-3">
+          <span class="logo-mark" style="width:20px;height:20px" aria-hidden="true"></span>
+          <span>&copy; 2026 StudyFlow</span>
+        </div>
       </footer>
     </section>
   `;
 }
 
+function setupCheckCardAnimation(host: HTMLElement): IntersectionObserver | null {
+  const card = host.querySelector<HTMLElement>('#check-card');
+  const pct = host.querySelector<HTMLElement>('#ck-pct');
+  if (!card || !pct) return null;
+
+  const rows = Array.from(card.querySelectorAll<HTMLElement>('.ck-row'));
+  const total = rows.length;
+
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      observer.disconnect();
+      let done = 0;
+      rows.forEach((row, i) => {
+        window.setTimeout(() => {
+          row.classList.add('done');
+          row.querySelector('.ck-box')?.classList.add('checked');
+          done++;
+          pct.textContent = Math.round((done / total) * 100) + '% done';
+        }, 600 + i * 550);
+      });
+    }
+  }, { threshold: 0.4 });
+  observer.observe(card);
+  return observer;
+}
+
+function setupStepReveal(host: HTMLElement): IntersectionObserver | null {
+  const steps = host.querySelectorAll<HTMLElement>('.step-row');
+  if (steps.length === 0) return null;
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      entry.target.classList.add('in');
+      observer.unobserve(entry.target);
+    }
+  }, { threshold: 0.35 });
+  steps.forEach(s => observer.observe(s));
+  return observer;
+}
+
+function setupRotator(host: HTMLElement): number | null {
+  const track = host.querySelector<HTMLElement>('#rotator-track');
+  if (!track) return null;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) return null;
+
+  const words = track.children.length - 1;
+  let idx = 0;
+  const lineHeight = 1.05;
+
+  const interval = window.setInterval(() => {
+    idx++;
+    track.style.transform = `translateY(-${idx * lineHeight}em)`;
+    if (idx === words) {
+      window.setTimeout(() => {
+        track.style.transition = 'none';
+        idx = 0;
+        track.style.transform = 'translateY(0em)';
+        // force reflow before re-enabling transition
+        void track.offsetHeight;
+        track.style.transition = '';
+      }, 700);
+    }
+  }, 2200);
+  return interval;
+}
+
 export function renderHome(host: HTMLElement, _store: Store, router: Router): () => void {
   host.innerHTML = buildHTML();
+  document.body.classList.add('home-active');
 
-  function handleClick(e: Event) {
+  function handleClick(e: Event): void {
     const target = e.target as HTMLElement;
     const btn = target.closest<HTMLElement>('[data-action],[data-scroll-target]');
     if (!btn) return;
-
     const action = btn.dataset['action'];
     const scrollTarget = btn.dataset['scrollTarget'];
-
     if (action === 'go-today') {
       router.navigate('today');
     } else if (scrollTarget) {
@@ -142,8 +232,16 @@ export function renderHome(host: HTMLElement, _store: Store, router: Router): ()
 
   host.addEventListener('click', handleClick);
 
+  const checkObserver = setupCheckCardAnimation(host);
+  const stepObserver = setupStepReveal(host);
+  const rotatorInterval = setupRotator(host);
+
   return () => {
     host.removeEventListener('click', handleClick);
+    checkObserver?.disconnect();
+    stepObserver?.disconnect();
+    if (rotatorInterval !== null) window.clearInterval(rotatorInterval);
+    document.body.classList.remove('home-active');
     host.innerHTML = '';
   };
 }
