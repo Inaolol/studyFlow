@@ -52,4 +52,13 @@ describe('exportICal', () => {
     const lines = result.split('\r\n');
     expect(lines.every(l => l.length <= 75)).toBe(true);
   });
+
+  it('exports multiple tasks as separate VTODO blocks', () => {
+    const task1 = { ...baseTask, id: 'task-1' };
+    const task2 = { ...baseTask, id: 'task-2', title: 'Read chapter 5' };
+    const result = exportICal([task1, task2]);
+    expect((result.match(/BEGIN:VTODO/g) ?? []).length).toBe(2);
+    expect(result).toContain('UID:task-1@studyflow');
+    expect(result).toContain('UID:task-2@studyflow');
+  });
 });

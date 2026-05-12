@@ -38,7 +38,10 @@ function utcStamp(d: Date): string {
 }
 
 function dateValue(d: Date): string {
-  return d.toISOString().slice(0, 10).replace(/-/g, '');
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}${m}${day}`;
 }
 
 function escapeText(s: string): string {
