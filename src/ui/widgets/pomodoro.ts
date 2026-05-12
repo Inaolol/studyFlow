@@ -40,9 +40,9 @@ export function mountPomodoro(host: HTMLElement, store: Store): () => void {
     const task = a.taskId ? store.tasks().find(t => t.id === a.taskId) : null;
     node.innerHTML = `
       <div class="pomodoro__label">${a.kind.replace('-', ' ')}${task ? ` · ${escape(task.title)}` : ''}</div>
-      <div class="pomodoro__clock" aria-live="off">${fmtClock(remainingMs(a, Date.now()))}</div>
+      <div class="pomodoro__clock" role="timer" aria-live="off">${fmtClock(remainingMs(a, Date.now()))}</div>
       <div class="pomodoro__controls">
-        <button data-act="pause">${a.paused ? 'Resume' : 'Pause'}</button>
+        <button data-act="pause" aria-pressed="${a.paused}">${a.paused ? 'Resume' : 'Pause'}</button>
         <button data-act="abort">Abort</button>
       </div>
     `;

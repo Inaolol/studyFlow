@@ -8,6 +8,8 @@ export function mountWeeklyFocusLine(host: HTMLElement, sessions: Session[], wee
   const xs = points.map(p => p.day / 1000);
   const ys = points.map(p => Math.round(p.minutes));
   host.innerHTML = '';
+  host.setAttribute('role', 'img');
+  host.setAttribute('aria-label', 'Weekly focus minutes, last 12 weeks');
   const u = new uPlot({
     width: host.clientWidth || 480,
     height: 180,

@@ -11,6 +11,8 @@ export function mountTasksPerDayBar(host: HTMLElement, tasks: Task[], now: numbe
   const xs = points.map(p => p.day / 1000);
   const ys = points.map(p => p.count);
   host.innerHTML = '';
+  host.setAttribute('role', 'img');
+  host.setAttribute('aria-label', 'Tasks completed per day, last 30 days');
 
   const barsBuilder = (uPlot as unknown as { paths: { bars?: (opts: { size?: [number] }) => unknown } }).paths?.bars;
   const opts: ConstructorParameters<typeof uPlot>[0] = {

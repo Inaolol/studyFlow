@@ -27,9 +27,9 @@ export function renderTaskRow(task: Task, deps: TaskRowDeps): HTMLElement {
       </div>
     </div>
     ${deps.onStart && task.completedAt === null
-      ? `<button class="task-row__start" aria-label="Start pomodoro">▶</button>`
+      ? `<button class="task-row__start" aria-label="Start pomodoro for ${escapeHtml(task.title)}">▶</button>`
       : ''}
-    <button class="task-row__delete" aria-label="Delete task">×</button>
+    <button class="task-row__delete" aria-label="Delete ${escapeHtml(task.title)}">×</button>
   `;
 
   const check = row.querySelector<HTMLInputElement>('.task-row__check')!;
