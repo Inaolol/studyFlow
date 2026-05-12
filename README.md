@@ -1,62 +1,145 @@
 # StudyFlow
 
-StudyFlow is a static study planner for students. It organizes subjects, tasks, deadlines, and weekly workload in one browser-based interface.
+[![CI](https://github.com/Inaolol/studyFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/Inaolol/studyFlow/actions/workflows/ci.yml)
+[![Live demo](https://img.shields.io/badge/demo-live-brightgreen)](https://inaolol.github.io/studyFlow/)
 
-![StudyFlow landing page](docs/screenshots/figure-01-home-landing.png)
+A signal-reactive study planner — built with TypeScript, no framework.
 
-> The project is built with plain **HTML**, **CSS**, and **JavaScript** so the structure, styling, and behavior are easy to review.
+![StudyFlow Today screen](docs/screenshots/figure-01-home-landing.png)
 
-## Project Summary
+**[Live demo →](https://inaolol.github.io/studyFlow/)**
 
-* **Purpose:** StudyFlow helps students see what to study today, what is coming next, and which subjects need attention.
-* **Visual Layout:** The interface uses a calm cream background, charcoal text, coral actions, subject color tags, progress cards, task rows, and modal forms.
-* **Document Structure:** The project is organized as one final static website with separate files for structure, style, and behavior.
-* **Tone:** The design is simple and direct. It focuses on planning work instead of adding unnecessary screens.
-* **Data Handling:** Tasks and subjects are saved in the browser using `localStorage`.
-* **User Control:** The user decides what to add, complete, delete, or schedule. The website only organizes the information.
+---
 
-## Main Screens
+## What & why
 
-| Screen | Purpose |
-|---|---|
-| Home | Introduces StudyFlow and explains the planner idea. |
-| Today | Shows current tasks, progress, filters, and quick actions. |
-| Subjects | Groups work by course and shows progress for each subject. |
-| Calendar | Shows weekly workload and task distribution by day. |
+StudyFlow is a study planner for tracking tasks, deadlines, and Pomodoro sessions across subjects. It is a real, useful tool — not a toy — so the architectural decisions have genuine constraints behind them.
 
-## File Structure
+The goal was to demonstrate frontend architecture depth: routing, reactivity, persistence, rich charting — without reaching for a framework's scaffolding. If you understand what React or Vue are doing for you, you can build the same primitives from scratch with a much clearer mental model. StudyFlow is that exercise, documented and shipped.
 
-```text
-studyflow/
-|-- index.html
-|-- styles.css
-|-- script.js
-|-- README.md
-|-- docs/
+It proves that a maintainable, type-safe, testable SPA can be built from first principles when you understand the abstractions underneath.
+
+---
+
+## Case study
+
+### Problem framing
+
+I wanted a portfolio piece that showed architectural judgment, not component assembly. The prompt: build a real study planner, ship it to GitHub Pages, make it installable as a PWA, get green Lighthouse scores, and write about every decision.
+
+The constraint I imposed: no React, no Vue, no framework. Not as a purity exercise — to force explicit decisions about routing, state management, DOM updates, and persistence. Things a framework absorbs silently become visible and deliberate.
+
+### Architectural decisions
+
+**Hand-rolled 80-LOC signal library (`src/reactive/signal.ts`)**
+
+The reactive core is `signal`, `computed`, and `effect` — a module-scoped dependency-tracking system with microtask-batched updates. ~8 unit tests cover tracking, batching, memoization, dispose, and leak prevention.
+
+```ts
+const count = signal(0);
+const doubled = computed(() => count() * 2);
+effect(() => console.log(doubled())); // logs 0, then 2, then 4
+count.set(1); // → logs 2
+count.set(2); // → logs 4
 ```
 
-## Runtime Files
+This is the portfolio talking point: understanding reactivity well enough to implement it cleanly in 80 lines.
 
-| File | Role |
+**Store-as-signals, persistence-as-effect**
+
+The store (`src/domain/store.ts`) is plain signals: `subjects`, `tasks`, `sessions`, `settings`, `active`. One `effect` serializes the store to localStorage debounced 200ms — it fires on any change, no manual subscription. The entire persistence layer is ~25 lines.
+
+**Sessions as first-class records**
+
+Pomodoro sessions are stored records (`Session[]`), not derived from timer runtime state. Stats compute from sessions + tasks, never from live state. This means stats survive task deletion, tab close mid-session, and time-zone changes. It also makes the stats domain pure and fully unit-testable with fabricated fixtures.
+
+**Hash router, typed**
+
+`src/ui/router.ts` is a ~60-line typed hash router. Each screen exports `mount(root): () => void`, returning a dispose function. The router calls dispose on navigation, preventing event-listener leaks. No library needed.
+
+**CSS token split**
+
+1709-line `styles.css` split into five files: `tokens.css` (design variables + dark-mode overrides), `base.css` (resets), `layout.css`, `components.css`, `animations.css`. Dark mode via `[data-theme="dark"]` overriding CSS custom properties. No FOUC: theme is resolved in a tiny inline script in `<head>` before CSS loads.
+
+### Tradeoffs documented
+
+**innerHTML re-render per effect region**
+
+Each effect owns a DOM region and rebuilds `innerHTML` on change. No fine-grained DOM diffing. At StudyFlow's scale (a bounded list of study tasks), this is imperceptible — re-rendering 50 task rows takes <1ms. The tradeoff is documented here rather than hidden.
+
+If the app grew to thousands of rows, keyed diffing would become necessary. For now, "make it work, then make it right" applies, and the decision is explicit.
+
+**Minimal dependencies**
+
+Runtime dependencies: `uplot` (45kB, canvas-based charts). That is it. No state library, no router library, no UI framework, no CSS framework. Each omission is a decision. The rule: only add a dependency if the alternative is genuinely worse, not just longer.
+
+### What's next
+
+- Fine-grained list patching for very large task lists
+- Cloud sync + auth so data survives device changes
+- Recurring tasks (most-requested missing feature)
+- Native mobile via Capacitor once cloud sync is in place
+
+---
+
+## Features
+
+| Feature | Description |
 |---|---|
-| `index.html` | Semantic page shell with header, navigation, app mount, and modal mount. |
-| `styles.css` | Design tokens, layout rules, cards, buttons, forms, responsive CSS, and animations. |
-| `script.js` | Hash routing, rendering, events, task actions, subject actions, calendar navigation, and `localStorage`. |
+| Task management | Add, complete, delete tasks with subject, due date, and time estimate |
+| Pomodoro timer | Task-bound 25/5/15 timer; sessions recorded as first-class data; drift-proof across tab close |
+| Stats dashboard | Streak KPIs, 365-day heatmap, tasks/day bar, time-on-subject donut, weekly focus line, hour histogram, leaderboard |
+| Keyboard shortcuts | `g t/s/c/d` navigate · `n` new task · `/` search · `j/k` move · `x` complete · `?` help |
+| Dark mode | System/light/dark toggle; no FOUC; CSS custom-property tokens |
+| Data portability | Export/import JSON backup; export iCal (.ics) for Apple/Google Calendar |
+| PWA | Installable; offline-capable from second visit |
+| Search | Case-insensitive substring search on Today screen, bound to `/` |
 
-## Feature Flow
+---
 
-![StudyFlow UX flowchart](docs/ux-flowchart.svg)
+## Tech stack
 
-## Key Features
+| Tool | Role | Why |
+|---|---|---|
+| TypeScript 5 strict | Language | `noUncheckedIndexedAccess` + `exactOptionalPropertyTypes` catch real bugs at the type level |
+| Vite 5 | Build | Fast HMR, ESM-native, trivial GitHub Pages deployment |
+| vite-plugin-pwa | PWA | Zero-config Workbox; manifest + service worker without boilerplate |
+| uPlot | Charts | 45kB, canvas-based, fast; no chart-framework overhead |
+| Vitest | Unit tests | Same config as Vite; jsdom env for DOM-touching tests |
+| Playwright | E2E | Real browser; `page.clock` for Pomodoro time manipulation |
+| ESLint + typescript-eslint | Linting | Catches unused variables, unsafe calls, and style drift |
+| Husky + lint-staged | Pre-commit | Typecheck + lint on staged files only |
 
-* **Task Control:** Add, complete, uncomplete, and delete study tasks.
-* **Subject Control:** Add subjects and assign tasks to them.
-* **Dashboard Filters:** View today, next 7 days, overdue tasks, all tasks, or one subject.
-* **Calendar Planning:** Move between weeks and add tasks for a selected day.
-* **Pomodoro Timer:** Task-bound 25/5/15 timer docked at the viewport bottom; sessions are recorded as first-class records that survive reloads.
-* **Stats Dashboard:** Streak KPIs, 365-day focus heatmap, tasks-per-day bar, time-on-subject donut, weekly focus line, hour-of-day histogram, and subject leaderboard.
-* **Settings:** Theme (system/light/dark), reduced-motion preference, Pomodoro durations, and week-start day.
-* **Keyboard Shortcuts:** `g t/s/c/d` to navigate, `n` for new task, `/` to search, `?` for the help overlay.
-* **Search:** Case-insensitive substring search across task titles and notes on the Today screen.
-* **Visual Feedback:** Progress cards, workload bars, subject colors, and completed task styling show status quickly.
-* **Landing Animation:** CSS keyframes animate the landing headline, buttons, background blobs, and scroll cue.
+---
+
+## Local development
+
+```bash
+git clone https://github.com/Inaolol/studyFlow.git
+cd studyFlow
+npm install
+npm run dev        # Vite dev server → http://localhost:5173/studyFlow/
+npm test           # Vitest unit tests
+npm run test:e2e   # Playwright E2E (requires: npm run build first)
+npm run check      # typecheck + lint + unit tests (what CI runs)
+```
+
+---
+
+## Lighthouse
+
+![Lighthouse scores](docs/screenshots/lighthouse.png)
+
+Audited 2026-05-13 against the local production build. Scores: Performance 99 · Accessibility 93 · Best Practices 96 · SEO 100.
+
+---
+
+## Accessibility
+
+- Skip link to main content (`#app`)
+- All interactive elements have descriptive `aria-label` attributes
+- Chart regions have `role="img"` with descriptive labels
+- Keyboard navigation throughout: all actions reachable without a mouse
+- Reduced-motion preference respected via `prefers-reduced-motion` and Settings override
+- Colour contrast meets WCAG AA (accent `#e34432` on white)
+- `tabindex="-1"` on `<main>` for skip-link focus target
